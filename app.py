@@ -2,9 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import mysql.connector
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey"  # Asegúrate de cambiar esta clave en producción
+app.secret_key = "supersecretkey"  
 
-# Conexión con MySQL
 def get_db_connection():
     try:
         conn = mysql.connector.connect(
@@ -18,7 +17,6 @@ def get_db_connection():
         print(f"❌ Error al conectar a MySQL: {e}")
         return None
 
-# Mostrar alumnos
 @app.route('/')
 def home():
     conn = get_db_connection()
@@ -39,7 +37,7 @@ def home():
 
     return render_template('index.html', alumnos=alumnos)
 
-# Agregar alumno
+
 @app.route('/add', methods=['POST'])
 def add():
     nombres = request.form['nombres'].strip()
@@ -68,9 +66,8 @@ def add():
             conn.close()
 
     return redirect(url_for('home'))
-
-# Actualizar alumno
-@app.route('/update/<int:id>', methods=['POST'])
+    
+    @app.route('/update/<int:id>', methods=['POST'])
 def update(id):
     nombres = request.form['nombres'].strip()
     apellidos = request.form['apellidos'].strip()
@@ -100,7 +97,7 @@ def update(id):
 
     return redirect(url_for('home'))
 
-# Eliminar alumno
+
 @app.route('/delete/<int:id>')
 def delete(id):
     conn = get_db_connection()
