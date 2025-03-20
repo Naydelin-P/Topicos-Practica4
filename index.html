@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Alumnos</title>
+
+    <style>
+        /* Estilo global */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Estilo para los encabezados */
+        h1 {
+            text-align: center;
+            color: #3e4a89;
+        }
+
+        h2 {
+            color: #3e4a89;
+            margin-top: 30px;
+            font-size: 1.5rem;
+        }
+
+        /* Estilo para los formularios */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #3e4a89;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3e4a89;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2e3b64;
+        }
+
+        /* Estilo para los mensajes flash */
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .flash-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .flash-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        /* Estilo para la lista de alumnos */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        a {
+            color: #3e4a89;
+            text-decoration: none;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <h1>Lista de Alumnos</h1>
+
+        <!-- Mostrar mensajes flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-message">
+                    {% for category, message in messages %}
+                        <div class="flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Formulario de agregar alumno -->
+        <form action="{{ url_for('add') }}" method="POST">
+            <input type="text" name="nombres" placeholder="Nombres" required>
+            <input type="text" name="apellidos" placeholder="Apellidos" required>
+            <input type="number" name="edad" placeholder="Edad" required>
+            <button type="submit">Agregar Alumno</button>
+        </form>
+
+        <h2>Alumnos</h2>
+        <ul>
+            {% for alumno in alumnos %}
+                <li>
+                    {{ alumno.nombres }} {{ alumno.apellidos }} - {{ alumno.edad }}
+                    <span>
+                        <a href="{{ url_for('update', id=alumno.id) }}">Actualizar</a>
+                        <a href="{{ url_for('delete', id=alumno.id) }}">Eliminar</a>
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</body>
+</html>
